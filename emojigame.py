@@ -19,17 +19,6 @@ clock = pygame.time.Clock()
 
 cards = [{'emoji': EMOJIS[i], 'flipped': False, 'matched': False} for i in range(GRID_SIZE * GRID_SIZE)]
 first_selection = None 
-
-def run_game():
-    start = time.perf_counter()
-    end = time.perf_counter()
-    elapsed = end - start
-    print(f"time: {elapsed:.2f} seconds")
-    return elapsed 
-
-high_score = float('inf')
-        
-
 def draw_board(): 
     for i, card in enumerate(cards): 
         x = (i % GRID_SIZE) * CARD_SIZE
@@ -42,12 +31,9 @@ def draw_board():
             screen.blit(emoji_surf, emoji_rect)
         else:
             # Pink card color
-            pygame.draw.rect(screen, (255, 182, 193), rect)
-            # Draw a smaller question mark emoji
-            qmark_font = pygame.font.SysFont("Apple Color Emoji", max(6, CARD_SIZE // 14))
-            qmark_surf = qmark_font.render("❔", True, (255, 255, 255))
-            qmark_rect = qmark_surf.get_rect(center=rect.center)
-            screen.blit(qmark_surf, qmark_rect)
+            pygame.draw.rect(screen, (255, 182, 193), rect) 
+            circle_radius = CARD_SIZE // 4
+            pygame.draw.circle(screen, (255, 255, 255), rect.center, circle_radius)
 
 
 def get_card_index(pos):
@@ -61,7 +47,7 @@ second_selection = None
 flip_back_time = 0
 
 running = True 
-moves_left = 20  # Player starts with 20 moves
+moves_left = 30  # Player starts with 30 moves
 while running: 
     screen.fill((255, 255, 255))
     draw_board()
@@ -74,7 +60,7 @@ while running:
     # Win or lose screen
     if all(card['matched'] for card in cards):
         win_font = pygame.font.SysFont("Arial", 60)
-        win_text = win_font.render("You Win!", True, (255, 215, 0))  # Yellow color
+        win_text = win_font.render("You Win!", True, (0, 200, 0))
         win_rect = win_text.get_rect(center=(WINDOW_SIZE // 2, WINDOW_SIZE // 2))
         screen.blit(win_text, win_rect)
         pygame.display.flip()
@@ -127,17 +113,8 @@ while running:
                     else:
                         flip_back_time = pygame.time.get_ticks() + 1000
                         moves_left -= 1  # Decrement moves after two cards are flipped
-
-while True:
-    score = run_game()
-    if score < high_score:
-        high_score = score
-        print(f"New high score! {high_score:.2f} seconds")
-    else:
-        print(f"best score: {high_score:.2f} seconds")
-    if input("play again? (y/n):") != 'y':
-        pygame.quit() 
-        sys.exit() 
+pygame.quit() 
+sys.exit() 
     
 
 
