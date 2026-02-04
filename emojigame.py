@@ -86,7 +86,7 @@ while running:
                         first_selection = None
                         second_selection = None
                     else:
-                        flip_back_time = pygame.time.get_ticks() + 2000
+                        flip_back_time = pygame.time.get_ticks() + 1000
 
 
 pygame.quit() 
