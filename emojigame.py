@@ -100,6 +100,23 @@ while running:
                         card.revealed = True
                         if first_card is None:
                             first_card = card
-                        elif second_card:
+                        elif second_card is None:
                             second_card = card
-                        break
+                            attempts += 1
+
+#check for match
+if first_card and second_card:
+    pygame.time.wait(500)
+    if first_card.symbol == second_card.symbol:
+        first_card.matched = True
+        second_card.matched = True
+        first_card = None
+        second_card = None
+        matches += 1
+    else: 
+        first_card.revealed = False
+        second_card.revealed = False
+        first_card = None
+        second_card = None
+
+        
