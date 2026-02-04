@@ -24,15 +24,14 @@ def draw_board():
         x = (i % GRID_SIZE) * CARD_SIZE
         y = (i // GRID_SIZE) * CARD_SIZE
         rect = pygame.Rect(x, y, CARD_SIZE, CARD_SIZE)
-        pygame.draw.rect (screen, (200, 200, 200), rect)
-        pygame.draw.rect(screen, (100, 100, 100), rect, 2)
+        pygame.draw.rect(screen, (200, 162, 200), rect)
         if card['flipped'] or card['matched']:
             emoji_surf = font.render(card['emoji'], True, (0, 0, 0))
             emoji_rect = emoji_surf.get_rect(center=rect.center)
             screen.blit(emoji_surf, emoji_rect)
         else:
-            
-            pygame.draw.rect(screen, (150, 150, 255), rect)
+            # Pink card color
+            pygame.draw.rect(screen, (255, 182, 193), rect) 
             circle_radius = CARD_SIZE // 4
             pygame.draw.circle(screen, (255, 255, 255), rect.center, circle_radius)
 
