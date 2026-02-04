@@ -92,3 +92,40 @@ while running:
 pygame.quit() 
 sys.exit() 
     
+
+
+
+
+# main game loop
+while running:
+    screen.fill(PINK)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if first_card is None or (first_card and second_card is None):
+                for card in cards:
+                    if card.rect.collidepoint(event.pos) and not card.revealed and not card.matched:
+                        card.revealed = True
+                        if first_card is None:
+                            first_card = card
+                        elif second_card is None:
+                            second_card = card
+                            attempts += 1
+
+#check for match
+if first_card and second_card:
+    pygame.time.wait(500)
+    if first_card.symbol == second_card.symbol:
+        first_card.matched = True
+        second_card.matched = True
+        first_card = None
+        second_card = None
+        matches += 1
+    else: 
+        first_card.revealed = False
+        second_card.revealed = False
+        first_card = None
+        second_card = None
+
+        
