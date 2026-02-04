@@ -7,7 +7,7 @@ GRID_SIZE = 6
 CARD_SIZE = WINDOW_SIZE // GRID_SIZE
 FPS = 30 
 
-EMOJIS = ["😅","🚌","🥸","🪸","🙄","🍊","🐹","🤩","🫡","😜","😮","🌽","👙","🚤","🏝️","👛","🙈","🍓"]
+EMOJIS = ["😅","😅","🚌","🚌","🥸","🥸","🪸","🪸","🙄","🙄","🍊","🍊","🐹","🐹","🤩","🤩","🫡","🫡","😜","😜","😮","😮","🌽","🌽","👙","👙","🚤","🚤","🏝️","🏝️","👛","👛","🙈","🙈","🍓","🍓"]
 random.shuffle(EMOJIS)
 
 pygame.init() 
@@ -39,12 +39,25 @@ def get_card_index(pos):
     row = y // CARD_SIZE
     return row * GRID_SIZE + col
 
+first_selection = None
+second_selection = None
+flip_back_time = 0
+
 running = True 
 while running: 
     screen.fill((255, 255, 255))
     draw_board()
     pygame.display.flip()
     clock.tick(FPS)
+
+
+    if flip_back_time and pygame.time.get_ticks() >= flip_back_time:
+        if first_selection is not None and second_selection is not None:
+            cards [first_selection]['flipped'] = False
+            cards [second_selection]['flipped'] = False
+        first_selection = None
+        second_selection = None
+        flip_back_time = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
@@ -54,6 +67,17 @@ while running:
             card = cards[idx] 
             if not card ['flipped'] and not card ['matched']: 
                 card ['flipped'] = True 
+                if first_selection is None:
+                    first_selection = idx
+                elif second_selection is None:
+                    second_selection = idx
+                    if cards[first_selection]['emoji'] == cards[second_selection]['emoji']:
+                        cards[first_selection]['matched'] = True
+                        cards[second_selection]['matched'] = True
+                        first_selection = None
+                        second_selection = None
+                    else:
+                        flip_back_time = pygame.time.get_ticks() + 1000
 
 
 pygame.quit() 
