@@ -13,7 +13,7 @@ random.shuffle(EMOJIS)
 pygame.init() 
 screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
 pygame.display.set_caption("Emoji Memory Game")
-font = pygame.font.SysFont("Apple Color Emoji", 7)
+font = pygame.font.SysFont("Apple Color Emoji", "Segoe UI Emoji", 7)
 clock = pygame.time.Clock()
 
 cards = [{'emoji': EMOJIS[i], 'flipped': False, 'matched': False} for i in range(GRID_SIZE * GRID_SIZE)]
@@ -33,7 +33,7 @@ def draw_board():
             # Pink card color
             pygame.draw.rect(screen, (255, 182, 193), rect)
             # Draw a smaller question mark emoji
-            qmark_font = pygame.font.SysFont("Apple Color Emoji", max(6, CARD_SIZE // 14))
+            qmark_font = pygame.font.SysFont("Apple Color Emoji", max(2, CARD_SIZE // 16))
             qmark_surf = qmark_font.render("❔", True, (255, 255, 255))
             qmark_rect = qmark_surf.get_rect(center=rect.center)
             screen.blit(qmark_surf, qmark_rect)
