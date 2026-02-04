@@ -1,6 +1,7 @@
 import pygame
 import random 
 import sys 
+import time 
 
 WINDOW_SIZE = 600 
 GRID_SIZE = 4
@@ -18,6 +19,16 @@ clock = pygame.time.Clock()
 
 cards = [{'emoji': EMOJIS[i], 'flipped': False, 'matched': False} for i in range(GRID_SIZE * GRID_SIZE)]
 first_selection = None 
+
+def run_game():
+    start = time.perf_counter()
+    end = time.perf_counter()
+    elapsed = end - start
+    print(f"time: {elapsed:.2f} seconds")
+    return elapsed 
+
+high_score = float('inf')
+        
 
 def draw_board(): 
     for i, card in enumerate(cards): 
@@ -114,9 +125,16 @@ while running:
                         flip_back_time = pygame.time.get_ticks() + 1000
                         moves_left -= 1  # Decrement moves after two cards are flipped
 
-
-pygame.quit() 
-sys.exit() 
+while True:
+    score = run_game()
+    if score < high_score:
+        high_score = score
+        print(f"New high score! {high_score:.2f} seconds")
+    else:
+        print(f"best score: {high_score:.2f} seconds")
+    if input("play again? (y/n):") != 'y':
+        pygame.quit() 
+        sys.exit() 
     
 
 
