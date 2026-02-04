@@ -14,7 +14,7 @@ random.shuffle(EMOJIS)
 pygame.init() 
 screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
 pygame.display.set_caption("Emoji Memory Game")
-font = pygame.font.SysFont("Apple Color Emoji", "Segoe UI Emoji", 7)
+font = pygame.font.SysFont(["Apple Color Emoji", "Segoe UI Emoji"], 10)
 clock = pygame.time.Clock()
 
 cards = [{'emoji': EMOJIS[i], 'flipped': False, 'matched': False} for i in range(GRID_SIZE * GRID_SIZE)]
