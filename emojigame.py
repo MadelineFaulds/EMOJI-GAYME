@@ -13,7 +13,7 @@ random.shuffle(EMOJIS)
 pygame.init() 
 screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
 pygame.display.set_caption("Emoji Memory Game")
-font = pygame.font.SysFont(None, 72)
+font = pygame.font.SysFont("Apple Color Emoji", 5)
 clock = pygame.time.Clock()
 
 cards = [{'emoji': EMOJIS[i], 'flipped': False, 'matched': False} for i in range(GRID_SIZE * GRID_SIZE)]
@@ -30,8 +30,11 @@ def draw_board():
             emoji_surf = font.render(card['emoji'], True, (0, 0, 0))
             emoji_rect = emoji_surf.get_rect(center=rect.center)
             screen.blit(emoji_surf, emoji_rect)
-        else: 
+        else:
+            
             pygame.draw.rect(screen, (150, 150, 255), rect)
+            circle_radius = CARD_SIZE // 4
+            pygame.draw.circle(screen, (255, 255, 255), rect.center, circle_radius)
 
 def get_card_index(pos):
     x, y = pos
@@ -53,20 +56,26 @@ while running:
 
     if flip_back_time and pygame.time.get_ticks() >= flip_back_time:
         if first_selection is not None and second_selection is not None:
-            cards [first_selection]['flipped'] = False
-            cards [second_selection]['flipped'] = False
-        first_selection = None
-        second_selection = None
+            # Only flip back if not matched
+            if not cards[first_selection]['matched']:
+                cards[first_selection]['flipped'] = False
+            if not cards[second_selection]['matched']:
+                cards[second_selection]['flipped'] = False
+            first_selection = None
+            second_selection = None
         flip_back_time = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Prevent flipping more than two cards at a time
+            if second_selection is not None or flip_back_time:
+                continue
             idx = get_card_index(event.pos)
-            card = cards[idx] 
-            if not card ['flipped'] and not card ['matched']: 
-                card ['flipped'] = True 
+            card = cards[idx]
+            if not card['flipped'] and not card['matched']:
+                card['flipped'] = True
                 if first_selection is None:
                     first_selection = idx
                 elif second_selection is None:
@@ -77,7 +86,7 @@ while running:
                         first_selection = None
                         second_selection = None
                     else:
-                        flip_back_time = pygame.time.get_ticks() + 1000
+                        flip_back_time = pygame.time.get_ticks() + 2000
 
 
 pygame.quit() 
